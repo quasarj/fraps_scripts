@@ -9,7 +9,11 @@ class MyHandler(FileSystemEventHandler):
     """Simple handler that sets up a queue of new files"""
     queue = []
 
-    def on_created(self, event):
+    # def on_created(self, event):
+    #     self.queue.append(event)
+
+    # turns out FRAPS renames the file once recording ends.
+    def on_moved(self, event):
         self.queue.append(event)
 
 
@@ -40,12 +44,15 @@ if __name__ == "__main__":
     observer.schedule(handler, path='.', recursive=False)
     observer.start()
 
+    blacklist = [] # files we have already renamed
     try:
         while True:
             if len(handler.queue) > 0:
                 event = handler.queue.pop(0)
-                if not event.is_directory and 'FRAPSVID' not in event.src_path:
-                    path, filename = os.path.split(event.src_path)
+                if not event.is_directory and 'FRAPSVID' not in event.src_path \
+                        and event.src_path not in blacklist:
+
+                    path, filename = os.path.split(event.dest_path)
                     print "Detected new file ({0})".format(filename)
                     
                     win = raw_input("Did you win? (No): ")
@@ -65,6 +72,7 @@ if __name__ == "__main__":
                         new_filename = "{guild} {date} {boss} {wipe}.avi".format(
                             guild=guild, boss=boss, date=today, wipe=wipe_text)
 
+                    blacklist.append(event.dest_path)
                     rename(path, filename, new_filename)
 
                     print_status(guild, boss, wipe_counter)
