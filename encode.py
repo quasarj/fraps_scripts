@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-ffmpeg = r"C:\Program Files (x86)\ffmpeg\ffmpeg.exe"
+ffmpeg = r"c:\Program Files (x86)\ffmpeg\ffmpeg.exe"
 args = " -i \"{0}\" -strict -2 -vcodec libx264 -acodec aac -f mp4 -b 4000k \"{1}\""
 
 avis = [f for f in os.listdir('.') if f.lower().endswith('avi')]
