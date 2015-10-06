@@ -1,11 +1,11 @@
 import os
 import subprocess
 
-ffmpeg = r"c:\Program Files (x86)\ffmpeg\ffmpeg.exe"
+ffmpeg = r"d:\ffmpeg\bin\ffmpeg.exe"
 args = " -i \"{0}\" -strict -2 -vcodec libx264 -acodec aac -f mp4 -b 4000k \"{1}\""
 
 avis = [f for f in os.listdir('.') if f.lower().endswith('avi')]
-print avis
+print(avis)
 
 for filename in avis:
     shortname, ext = os.path.splitext(filename)
@@ -16,6 +16,6 @@ for filename in avis:
         if os.path.isfile(dest_file):
             os.unlink(filename) # delete the original
     else:
-        print "There was an error encoding! Not deleting original."
+        print("There was an error encoding! Not deleting original.")
 
-print "Done"
+print("Done")
